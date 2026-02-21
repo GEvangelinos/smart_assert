@@ -96,6 +96,9 @@ main.c:8: main: SMART_ASSERT(): Condition #3: `c++ == 1` failed.
 
 ---
 
+## !Note
+MASSERT correctly handles nested parentheses and braces but may be confused by commas inside string literals (e.g., MASSERT(s == "a,b")) as it does not implement a full C lexer.
+
 ## 📦 Integration Steps
 
 1. Copy `smart_assert.h` to your project (e.g. `include/` folder)
