@@ -28,20 +28,32 @@ extern "C"
 #ifndef __FILENAME__
 #define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 #endif /* __FILENAME__ */
-
-        static inline int _get_nth_comma_position(const char *_string, int _target_comma_count)
-        {
-                int string_index = 0;
-                int found_commas = 0;
-                for (; (_string)[string_index] != '\0'; string_index++)
-                {
-                        if ((_string)[string_index] == ',')
-                                found_commas++;
-                        if (found_commas == (_target_comma_count))
-                                break;
-                }
-                return (found_commas == _target_comma_count) ? string_index : 0;
-        }
+	static unsigned long long _get_nth_comma_position(const char *str, const unsigned long long target_comma_count)
+	{
+		// Obviously the opener/closer system ain't perfect... as such tokens inside string or comment
+		// will still fuck up the order.. but for an assert macro it will do for now...
+		unsigned long long str_index = 0;
+		unsigned long long found_commas = 0;
+		long long openers = 0;
+		for (; str[str_index] != '\0'; str_index++)
+		{
+			if (str[str_index] == '(' || str[str_index] == '[' || str[str_index] == '{')
+			{
+				++openers;
+				continue;
+			}
+			if (str[str_index] == ')' || str[str_index] == ']' || str[str_index] == '}')
+			{
+				--openers;
+				continue;
+			}
+			if (str[str_index] == ',' && openers == 0)
+				++found_commas;
+			if (found_commas == target_comma_count)
+				break;
+		}
+		return found_commas == target_comma_count ? str_index : 0;
+	}
 
         static inline int _get_leading_spaces(const char *_string)
         {
