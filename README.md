@@ -7,6 +7,10 @@ A lightweight, multi-expression assertion macro for C and C++, with optional deb
 A simple and powerful assertion macro that improves debug visibility with minimal
  code by allowing multiple conditions in a single statement — while keeping production builds fast and clean.
 
+Standard assert() is a "fail-fast" gate: it stops at the first failure. If your logic requires three pointers and a state flag to be valid, standard assert only tells you about the first one that failed.
+
+SMART_ASSERT() macro evaluates every condition passed to it before halting. This provides a complete "State Snapshot" of the failure, allowing you to see exactly which invariants were violated in a single crash report.
+
 
 ## Features
 
